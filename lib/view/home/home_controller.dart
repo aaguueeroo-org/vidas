@@ -1,8 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:vidas/database/dao/storage_dao.dart';
 
-class HomeViewModel with ChangeNotifier {
-  Future<void> startGame(BuildContext context) async {
+class HomeController {
+
+  static Future<void> startGame(BuildContext context) async {
 
     Map<String, dynamic> newGame = {
       'name': 'Julia',
@@ -14,7 +15,7 @@ class HomeViewModel with ChangeNotifier {
 
   }
 
-  Future<void> loadGame(BuildContext context) async {
+  static Future<void> loadGame(BuildContext context) async {
     debugPrint((await StorageDao.getAllSavedGames()).toString());
   }
 

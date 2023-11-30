@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:vidas/database/database_connection.dart';
-import 'package:vidas/view/home/home_view_model.dart';
 import 'package:vidas/view/home/home_view.dart';
 
-import 'config/app_themes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,12 +10,7 @@ void main() async {
   DatabaseConnection.instance.database;
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => HomeViewModel()),
-      ],
-      child: const MyApp(),
-    ),
+    const MyApp(),
   );
 }
 
@@ -27,10 +19,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Vidas',
-      theme: AppThemes.aestheticTheme,
-      home: const HomeView(),
+      // theme: AppThemes.aestheticTheme,
+      home: HomeView(),
     );
   }
 }

@@ -1,7 +1,14 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:vidas/database/database_connection.dart';
 
+/// Data Access Object that manages all database operations abstractly.
+///
+/// This is the only class that communicates with the database. All its methods
+/// are static and can be called from anywhere in the app, by giving specific
+/// parameters and thus making the operations specific.
 class Dao {
+
+  /// Gets the database instance from the [DatabaseConnection] singleton.
   static Database _getDatabase() {
     Database? db = DatabaseConnection.instance.database;
 
@@ -12,23 +19,43 @@ class Dao {
     }
   }
 
-  /// Inserts a row in the database where each key in the Map is a column name
-  /// and the value is the column value. The return value is the id of the
-  /// inserted row.
+  /// Inserts a row into the specified table.
+  ///
+  /// Calls a method from the [Database] class to insert a row into the table
+  /// with the name specified in the parameters. The row is a map of strings
+  /// and dynamic values, which are the column names and the values to be
+  /// inserted into the row, respectively.
+  ///
+  /// Returns the id of the inserted row.
   static Future<int?> insertRow(String table, Map<String, dynamic> row) async {
     Database db = _getDatabase();
     return await db.insert(table, row);
   }
 
-  /// All of the rows are returned as a list of maps, where each map is
-  /// a key-value list of columns.
+  /// Reads all the rows from the specified table.
+  ///
+  /// Calls a method from the [Database] class to read all the rows from the
+  /// table with the name specified in the parameters.
+  ///
+  /// Returns a list of maps, where each map represents a row from the table.
+  /// The keys of the map are the column names and the values are the values
+  /// of the row.
   static Future<List<Map<String, dynamic>>> readTable(String table) async {
     Database db = _getDatabase();
     return await db.query(table);
   }
 
-  /// All of the rows are returned as a list of maps, where each map is
-  /// a key-value list of columns.
+  /// Reads a row from the specified table with specified parameters.
+  ///
+  /// Calls a method from the [Database] class to read a row from the table
+  /// with the name specified in the parameters. The parameters are used to
+  /// specify the conditions of the query, such as the where clause, the
+  /// where arguments, the group by clause, the having clause, the order by
+  /// clause, the limit and the offset.
+  ///
+  /// Returns a list of maps, where each map represents a row from the table.
+  /// The keys of the map are the column names and the values are the values
+  /// of the row.
   static Future<List<Map<String, dynamic>>> readRows(
     String where,
     String table,
@@ -52,16 +79,28 @@ class Dao {
     );
   }
 
-  /// All of the methods (insert, query, update, delete) can also be done using
-  /// raw SQL commands. This method uses a raw query to give the row count.
+  /// Gets the number of rows in the specified table.
+  ///
+  /// Calls a method from the [Database] class to get the number of rows in
+  /// the table with the name specified in the parameters.
+  ///
+  /// Returns the number of rows in the table.
   static Future<int> readRowCount(String table) async {
     Database db = _getDatabase();
     final results = await db.rawQuery('SELECT COUNT(*) FROM $table');
     return Sqflite.firstIntValue(results) ?? 0;
   }
 
-  /// We are assuming here that the id column in the map is set. The other
-  /// column values will be used to update the row.
+  /// Updates a row from the specified table by using the field `id` from the
+  /// row.
+  ///
+  /// Calls a method from the [Database] class to update a row from the table
+  /// with the name specified in the parameters. The row is a map of strings
+  /// and dynamic values, which are the column names and the values to be
+  /// inserted into the row, respectively. The row must have a field `id` that
+  /// is used to identify the row to be updated.
+  ///
+  /// Returns the number of rows updated.
   static Future<int> update(String table, Map<String, dynamic> row) async {
     Database db = _getDatabase();
 
@@ -75,8 +114,13 @@ class Dao {
     );
   }
 
-  /// Deletes the row specified by the id. The number of affected rows is
-  /// returned. This should be 1 as long as the row exists.
+  /// Deletes a row from the specified table by field `id`.
+  ///
+  /// Calls a method from the [Database] class to delete a row from the table
+  /// with the name specified in the parameters. The row to delete is found
+  /// thanks to the parameter [id] which is an int.
+  ///
+  /// Returns the number of rows deleted, which should always be 1.
   static Future<int> delete(String table, int id) async {
     Database db = _getDatabase();
 

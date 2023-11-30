@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vidas/database/dao/storage_dao.dart';
 import 'package:vidas/model/genders.dart';
 import 'package:vidas/model/vida.dart';
+import 'package:vidas/view/vida/vida_view.dart';
+
+import 'package:vidas/view/vida/vida_view_model.dart';
 
 class NewVidaViewModel with ChangeNotifier {
   TextEditingController nameController = TextEditingController();
@@ -71,8 +75,18 @@ class NewVidaViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> newGame() async {
+  Future<void> newGame(BuildContext context) async {
+    //TODO fix this -> snackBar is behind dialog
+    if (nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a name'),
+        ),
+      );
+      return;
+    }
 
+    final navigator = Navigator.of(context);
 
     Vida newVida = Vida(
       name: nameController.text,
@@ -87,6 +101,22 @@ class NewVidaViewModel with ChangeNotifier {
 
     if (vidaId != null) {
       debugPrint('Game saved! id = $vidaId');
+
+      navigator.pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+            create: (context) => VidaViewModel(
+              gameId: vidaId,
+              name: newVida.name,
+              gender: newVida.gender,
+              avatarId: newVida.avatarId,
+              age: newVida.age,
+            ),
+            child: const VidaView(),
+          ),
+        ),
+      );
+
     } else {
       debugPrint('Game not saved!');
     }

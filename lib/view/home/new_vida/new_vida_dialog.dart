@@ -94,16 +94,7 @@ class NewVidaDialog extends StatelessWidget {
 
             //Start Vida button
             ElevatedButton(
-              onPressed: () {
-                if(controller.nameController.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter a name'),
-                    ),
-                  );
-                }
-                controller.newGame();
-              },
+              onPressed: () => controller.newGame(context),
               child: const Text('Start Vida'),
             ),
           ],

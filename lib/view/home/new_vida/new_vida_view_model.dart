@@ -7,6 +7,7 @@ import 'package:vidas/model/vida.dart';
 /// Contains the logic for the [NewVidaDialog].
 class NewVidaViewModel with ChangeNotifier {
 
+  /// The number of avatars available to loop through in the dialog.
   static const numberOfAvatars = 19;
 
   /// The controller for the name text field in the dialog.

@@ -126,7 +126,7 @@ class Dao {
 
     return await db.delete(
       table,
-      where: '$id = ?',
+      where: 'id = ?',
       whereArgs: [id],
     );
   }

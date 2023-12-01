@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vidas/view/home/home_controller.dart';
+import 'package:vidas/view/home/load_vida/load_vida_dialog.dart';
 import 'package:vidas/view/home/new_vida/new_vida_dialog.dart';
 
 class HomeView extends StatelessWidget {
@@ -36,7 +36,7 @@ class HomeView extends StatelessWidget {
 
             //Load vida button
             ElevatedButton(
-              onPressed: () => HomeController.loadGame(context),
+              onPressed: () => LoadVidaDialog.show(context),
               child: const Text('Load vida'),
             ),
             const SizedBox(height: 10),

@@ -35,4 +35,9 @@ class Vida {
     );
   }
 
+  @override
+  String toString() {
+    return 'Vida{id: $id, name: $name, gender: $gender, age: $age, avatarId: $avatarId}';
+  }
+
 }

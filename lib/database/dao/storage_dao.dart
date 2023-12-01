@@ -18,4 +18,8 @@ class StorageDao extends Dao {
     return vidas.map((e) => Vida.fromSqlMap(e)).toList();
   }
 
+  static Future<int> deleteSavedGame(int vidaId) async {
+    return await Dao.delete(_tableName, vidaId);
+  }
+
 }

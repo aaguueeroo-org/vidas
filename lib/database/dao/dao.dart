@@ -109,7 +109,7 @@ class Dao {
     return await db.update(
       table,
       row,
-      where: '$id = ?',
+      where: 'id = ?',
       whereArgs: [id],
     );
   }

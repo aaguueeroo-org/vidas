@@ -95,9 +95,9 @@ class NewVidaViewModel with ChangeNotifier {
       age: 0,
     );
 
-    int? vidaId = await StorageDao.saveNewGame(newVida.toSqlMap());
+    int? vidaId = await StorageDao.createNewGame(newVida.toSqlMap());
 
-    newVida.gameId = vidaId;
+    newVida.id = vidaId;
 
     if (vidaId != null) {
       debugPrint('Game saved! id = $vidaId');
@@ -105,18 +105,11 @@ class NewVidaViewModel with ChangeNotifier {
       navigator.pushReplacement(
         MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
-            create: (context) => VidaViewModel(
-              gameId: vidaId,
-              name: newVida.name,
-              gender: newVida.gender,
-              avatarId: newVida.avatarId,
-              age: newVida.age,
-            ),
+            create: (context) => VidaViewModel(vida: newVida),
             child: const VidaView(),
           ),
         ),
       );
-
     } else {
       debugPrint('Game not saved!');
     }

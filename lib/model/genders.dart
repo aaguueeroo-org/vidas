@@ -17,4 +17,18 @@ enum Genders {
     }
   }
 
+  static Genders fromString(String genderString) {
+    switch (genderString.toLowerCase()) {
+      case 'male':
+        return Genders.male;
+      case 'female':
+        return Genders.female;
+      case 'diverse':
+        return Genders.diverse;
+      default:
+        throw ArgumentError('Invalid gender string: $genderString');
+    }
+  }
+
+
 }

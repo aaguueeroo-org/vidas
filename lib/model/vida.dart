@@ -1,14 +1,14 @@
 import 'package:vidas/model/genders.dart';
 
 class Vida {
-  int? gameId;
+  int? id;
   String name;
   Genders gender;
   int avatarId;
   int age;
 
   Vida({
-    this.gameId,
+    this.id,
     required this.name,
     required this.gender,
     required this.avatarId,
@@ -17,12 +17,22 @@ class Vida {
 
   Map<String, dynamic> toSqlMap() {
     return {
-      'id': gameId,
+      'id': id,
       'name': name,
       'gender': gender.toString(),
       'age': age,
       'avatar_id': avatarId,
     };
+  }
+
+  factory Vida.fromSqlMap(Map<String, dynamic> map) {
+    return Vida(
+      id: map['id'] as int,
+      name: map['name'] as String,
+      gender: Genders.fromString(map['gender'] as String),
+      age: map['age'] as int,
+      avatarId: map['avatar_id'] as int,
+    );
   }
 
 }

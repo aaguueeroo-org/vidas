@@ -5,12 +5,15 @@ import 'package:vidas/view/home/load_vida/widgets/vida_slot_card.dart';
 
 import 'package:vidas/view/home/load_vida/load_vida_view_model.dart';
 
+/// Shows a list of saved games and allows the user to either delete them or
+/// load them.
 class LoadVidaDialog extends StatefulWidget {
   const LoadVidaDialog({super.key});
 
   @override
   State<LoadVidaDialog> createState() => _LoadVidaDialogState();
 
+  /// Shows the dialog and adds a [LoadVidaViewModel] to the widget tree.
   static Future<void> show(BuildContext context) async {
     await showDialog(
       context: context,
@@ -28,59 +31,63 @@ class _LoadVidaDialogState extends State<LoadVidaDialog> {
     final controller = Provider.of<LoadVidaViewModel>(context);
 
     return Dialog(
-      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: 30,
+        vertical: 30,
+      ),
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       child: Container(
         padding: const EdgeInsets.all(15),
-        alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const BackButton(),
-            Expanded(
-              child: FutureBuilder<List<Vida>>(
-                future: controller.getAllSavedGames(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<Vida> vidas = snapshot.data!;
+            FutureBuilder<List<Vida>>(
+              future: controller.getAllSavedGames(),
+              builder: (context, snapshot) {
 
-                    return ListView.builder(
-                      itemCount: vidas.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: 0,
-                          ),
-                          child: VidaSlotCard(
-                            vida: vidas[index],
-                            onDelete: (vidaId) {
+                // If there are saved games, show them
+                if (snapshot.hasData) {
+                  List<Vida> vidas = snapshot.data!;
 
-                              setState(() {
-                                vidas.removeAt(index);
-                              });
+                  // Saved games list
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: vidas.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      return VidaSlotCard(
+                        vida: vidas[index],
+                        onDelete: (vidaId) {
+                          // Removes item in the view
+                          setState(() {
+                            vidas.removeAt(index);
+                          });
+                          //Removes item in the database
+                          controller.deleteGame(vidaId);
+                        },
+                      );
+                    },
+                  );
+                }
 
-                              controller.deleteGame(vidaId);
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return const Center(
-                      child: Text('No saved games'),
-                    );
-                  }
-                },
-              ),
+                // Show a loading indicator while the data is loading
+                else if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                // If there are no saved games, show a message
+                else {
+                  return const Center(
+                    child: Text('No saved games'),
+                  );
+                }
+              },
             ),
           ],
         ),

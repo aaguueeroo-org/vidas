@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:vidas/model/vida.dart';
 
-
+/// Displays the main information about a vida in a card: name, age, avatar and
+/// creation date. The widget accepts an [onDelete] function that is called when
+/// the user swipes the card to the left.
 class VidaSlotCard extends StatelessWidget {
+
+  /// The vida to display.
   final Vida vida;
+
+  /// The function to call when the user swipes the card to the left.
   final Function(int) onDelete;
 
+  /// Creates a new [VidaSlotCard] with the given [vida] and sets the [onDelete]
+  /// function for when the user swipes the card to the left.
   const VidaSlotCard({
     super.key,
     required this.vida,
@@ -35,6 +43,7 @@ class VidaSlotCard extends StatelessWidget {
             size: 40,
           ),
         ),
+        //Function called when the user swipes the card to the left
         onDismissed: (direction) => onDelete(vida.id!),
         child: InkWell(
           onTap: () {},
@@ -46,15 +55,24 @@ class VidaSlotCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+
+                //Vida information
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    //Name
                     Text(vida.name, style: textStyle),
+
+                    //Age
                     Text('${vida.age} years old', style: textStyle),
+
+                    //Saved date
                     //TODO implement saving date
                     Text('23/07/2023', style: smallTextStyle),
                   ],
                 ),
+
+                //Avatar
                 Image.asset('assets/images/avatars/${vida.avatarId}.png'),
               ],
             ),

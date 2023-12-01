@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vidas/model/vida.dart';
+import 'package:vidas/view/home/load_vida/load_vida_view_model.dart';
 
 /// Displays the main information about a vida in a card: name, age, avatar and
 /// creation date. The widget accepts an [onDelete] function that is called when
@@ -46,7 +47,7 @@ class VidaSlotCard extends StatelessWidget {
         //Function called when the user swipes the card to the left
         onDismissed: (direction) => onDelete(vida.id!),
         child: InkWell(
-          onTap: () {},
+          onTap: () => LoadVidaViewModel.loadGame(vida, context),
           child: Container(
             height: 100,
             color: Theme.of(context).colorScheme.secondary,

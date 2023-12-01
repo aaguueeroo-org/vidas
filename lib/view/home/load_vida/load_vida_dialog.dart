@@ -46,7 +46,7 @@ class _LoadVidaDialogState extends State<LoadVidaDialog> {
           children: [
             const BackButton(),
             FutureBuilder<List<Vida>>(
-              future: controller.getAllSavedGames(),
+              future: LoadVidaViewModel.getAllSavedGames(),
               builder: (context, snapshot) {
 
                 // If there are saved games, show them

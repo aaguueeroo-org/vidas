@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:vidas/view/home/home_view_model.dart';
+import 'package:vidas/view/home/load_vida/load_vida_dialog.dart';
+import 'package:vidas/view/home/new_vida/new_vida_dialog.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({Key? key}) : super(key: key);
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    HomeViewModel controller = Provider.of<HomeViewModel>(
-      context,
-      listen: false,
-    );
-
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -31,21 +26,24 @@ class HomeView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(flex: 8),
+
+            //New vida button
             ElevatedButton(
-              onPressed: () => controller.startGame(context),
+              onPressed: () => NewVidaDialog.show(context),
               child: const Text('New vida'),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
+
+            //Load vida button
             ElevatedButton(
-              onPressed: () => controller.loadGame(context),
+              onPressed: () => LoadVidaDialog.show(context),
               child: const Text('Load vida'),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
+
             const Spacer(flex: 10),
+
+            // Credits and socials
             const Column(
               children: [
                 Text('Julia Agüero'),

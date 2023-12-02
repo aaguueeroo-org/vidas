@@ -18,6 +18,8 @@ class Vida {
   /// The age of the player.
   int age;
 
+  // List<Education> educations
+
   /// Creates a new game with the given parameters. [id] is optional because
   /// it does not exist until the game is saved to the database, but it should
   /// always be updated after inserting the new game into the database.

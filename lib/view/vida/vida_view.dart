@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vidas/view/vida/vida_view_model.dart';
+import 'package:vidas/view/vida/widgets/action_buttons.dart';
 import 'package:vidas/view/vida/widgets/player_info.dart';
 import 'package:vidas/view/vida/widgets/tool_bar.dart';
 
@@ -24,28 +25,28 @@ class VidaView extends StatelessWidget {
             const PlayerInfo(),
             const Spacer(),
 
-            //Main actions
-            // Flexible(
-            //   flex: 25,
-            //   child: Row(
-            //     crossAxisAlignment: CrossAxisAlignment.stretch,
-            //     children: [
-            //       SizedBox(
-            //         width: width / 20,
-            //         child: EnergyBar(
-            //           energyLevel: controller.energy,
-            //           vertical: true,
-            //         ),
-            //       ),
-            //       const Spacer(),
-            //       const Expanded(
-            //         flex: 19,
-            //         child: ActionButtons(),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // const Spacer(),
+            // Main actions
+            Flexible(
+              flex: 25,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // SizedBox(
+                  //   width: width / 20,
+                  //   child: EnergyBar(
+                  //     energyLevel: controller.energy,
+                  //     vertical: true,
+                  //   ),
+                  // ),
+                  const Spacer(),
+                  const Expanded(
+                    flex: 19,
+                    child: ActionButtons(),
+                  ),
+                ],
+              ),
+            ),
+            const Spacer(),
 
             //log
             // const Flexible(

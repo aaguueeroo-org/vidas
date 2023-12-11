@@ -1,61 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:vidas/view/education/widgets/education_button.dart';
 import 'package:vidas/view/education/widgets/education_info.dart';
+import 'package:vidas/view/education/widgets/education_list.dart';
 
-import '../../model/education.dart';
-import 'education_view_model.dart';
 
 class EducationView extends StatelessWidget {
   const EducationView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
-    EducationViewModel controller = Provider.of<EducationViewModel>(
-      context,
-    );
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const BackButton(),
-        actions: [
-          IconButton(
-            // height: 10,
-            onPressed: () => controller.showOptionsDialog(context),
-            icon: Icon(
-              Icons.settings_outlined,
-              size: width / 12,
-            ),
-            color: Theme.of(context).colorScheme.onSecondary,
-          ),
+        actions: const [
+          // IconButton(
+          //   // height: 10,
+          //   onPressed: () => controller.showOptionsDialog(context),
+          //   icon: Icon(
+          //     Icons.settings_outlined,
+          //     size: width / 12,
+          //   ),
+          //   color: Theme.of(context).colorScheme.onSecondary,
+          // ),
         ],
       ),
-      backgroundColor: Colors.transparent,
       body: Container(
-        height: height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const SizedBox(height: 10),
-            EducationInfo(
-              playerName: controller.playerName,
-              field: 'Field',
-              grade: 7.5,
-              educationHistory: const [],
-            ),
-            const SizedBox(height: 20),
+            SizedBox(height: 10),
+            EducationInfo(),
+            SizedBox(height: 20),
+            EducationButton(),
             // const SizedBox(
             //   height: 150,
             //   child: LogContainer(),
             // ),
-            const SizedBox(height: 20),
-            // Expanded(child: EducationList(education: education)),
-            const SizedBox(height: 30),
+            SizedBox(height: 20),
+            Expanded(child: EducationList()),
+            SizedBox(height: 30),
             // ElevatedButton(
             //   onPressed: () => controller.showActionsDialog(context),
             //   child: const Text('Actions'),

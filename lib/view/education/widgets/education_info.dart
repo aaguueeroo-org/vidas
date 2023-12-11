@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vidas/utils/text_utils.dart';
 
-import '../../../model/education.dart';
+import 'package:vidas/view/education/education_view_model.dart';
+
+import 'package:vidas/model/education.dart';
 
 /// Widget that displays the info on top the page. It will display an icon, and
 /// three text lines: title, subtitle and details. It also includes a progress
 /// bar showing performance.
 class EducationInfo extends StatelessWidget {
-  final String playerName;
-  final String? field;
-  final double grade;
-  final List<Education> educationHistory;
-
-  const EducationInfo({
-    super.key,
-    required this.playerName,
-    required this.field,
-    required this.grade,
-    required this.educationHistory,
-  });
+  const EducationInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<EducationViewModel>(context);
+
+    final Education? education = controller.getCurrentEducation();
+
+    final String educationName = education != null
+        ? TextUtils.getCourseName(education)
+        : 'No current studies';
+
     return Column(
       children: [
         Row(
@@ -47,21 +48,19 @@ class EducationInfo extends StatelessWidget {
                 children: [
                   //Player name and last name
                   Text(
-                    playerName,
+                    controller.playerName,
                     textAlign: TextAlign.start,
                   ),
 
-                  //Player age
+                  //Education course
                   Text(
-                    field == null
-                        ? 'No current studies'
-                        : 'Course: $field',
+                    educationName,
                     textAlign: TextAlign.start,
                   ),
 
-                  //Player job position or study
+                  //Grade
                   Text(
-                    grade == null ? '' : 'Grade: $grade/100',
+                    education == null ? '' : 'Grade: ${education.grade}/100',
                     textAlign: TextAlign.start,
                   ),
                 ],
@@ -71,7 +70,7 @@ class EducationInfo extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         // height: 15,
-        Column(
+        const Column(
           children: [
             // const SizedBox(
             //   height: 15,

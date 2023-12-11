@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:vidas/view/vida/vida_view_model.dart';
 
 class ActionButtons extends StatelessWidget {
-  const ActionButtons({Key? key}) : super(key: key);
+  const ActionButtons({super.key});
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
-    VidaViewModel controller = Provider.of<VidaViewModel>(context);
 
     int horizontalFlex = 10;
     int verticalFlex = 9;
@@ -40,17 +36,18 @@ class ActionButtons extends StatelessWidget {
                 Expanded(
                   flex: horizontalFlex,
                   child: ActionButtonSingle(
-                    text: "Education",
+                    text: 'Education',
                     icon: Icons.menu_book_rounded,
                     textStyle: textStyle,
-                    onPressed: () => controller.pushEducation(context),
+                    onPressed: () {},
+                    // onPressed: () => AppRoutes.pushEducationView(context),
                   ),
                 ),
                 const Spacer(),
                 Expanded(
                   flex: horizontalFlex,
                   child: ActionButtonSingle(
-                    text: "Work",
+                    text: 'Work',
                     icon: Icons.work,
                     textStyle: textStyle,
                     onPressed: () {},
@@ -69,7 +66,7 @@ class ActionButtons extends StatelessWidget {
                 Expanded(
                   flex: horizontalFlex,
                   child: ActionButtonSingle(
-                    text: "Leisure",
+                    text: 'Leisure',
                     icon: Icons.chair_rounded,
                     textStyle: textStyle,
                     onPressed: () {},
@@ -79,7 +76,7 @@ class ActionButtons extends StatelessWidget {
                 Expanded(
                   flex: horizontalFlex,
                   child: ActionButtonSingle(
-                    text: "Health",
+                    text: 'Health',
                     icon: Icons.healing,
                     textStyle: textStyle,
                     onPressed: () {},
@@ -102,13 +99,13 @@ class ActionButtonSingle extends StatelessWidget {
   final Function onPressed;
 
   const ActionButtonSingle({
-    Key? key,
+    super.key,
     required this.text,
     required this.icon,
     required this.textStyle,
     // required this.foregroundColor,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

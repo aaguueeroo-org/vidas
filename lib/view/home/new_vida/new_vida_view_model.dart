@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:vidas/config/app_routes.dart';
-import 'package:vidas/database/dao/storage_dao.dart';
+import 'package:vidas/config/get_it.dart';
+import 'package:vidas/database/dao/character_dao.dart';
+import 'package:vidas/database/dao/vida_dao.dart';
+import 'package:vidas/model/character.dart';
 import 'package:vidas/model/genders.dart';
 import 'package:vidas/model/vida.dart';
 
 /// Contains the logic for the [NewVidaDialog].
 class NewVidaViewModel with ChangeNotifier {
-
   /// The number of avatars available to loop through in the dialog.
   static const numberOfAvatars = 19;
 
@@ -106,23 +109,31 @@ class NewVidaViewModel with ChangeNotifier {
 
     final NavigatorState navigator = Navigator.of(context);
 
-    Vida newVida = Vida(
+    int? vidaId = await VidaDao.createNewGame();
+
+    Character character = Character(
       name: nameController.text,
       gender: _selectedGender,
       avatarId: _selectedAvatar,
       age: 0,
     );
 
-    int? vidaId = await StorageDao.createNewGame(newVida.toSqlMap());
+    int? characterId =
+        await CharacterDao.createNewCharacter(character, vidaId!);
 
-    newVida.id = vidaId;
-
-    if (vidaId != null) {
-      debugPrint('Game saved! id = $vidaId');
-      AppRoutes.createVidaView(navigator, newVida);
-    } else {
-      debugPrint('Game not saved!');
+    if (GetIt.instance.isRegistered<Vida>()) {
+      GetIt.instance.unregister<Vida>();
     }
+
+    setupLocator(
+      vida: Vida.newGame(
+        id: vidaId,
+        character: character..id = characterId,
+      ),
+    );
+
+    debugPrint('Game saved! id = $vidaId');
+    AppRoutes.createVidaView(navigator);
   }
 
   /// Clears all fields in the dialog.

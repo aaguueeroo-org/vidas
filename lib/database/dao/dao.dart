@@ -7,7 +7,6 @@ import 'package:vidas/database/database_connection.dart';
 /// are static and can be called from anywhere in the app, by giving specific
 /// parameters and thus making the operations specific.
 class Dao {
-
   /// Gets the database instance from the [DatabaseConnection] singleton.
   static Database _getDatabase() {
     Database? db = DatabaseConnection.instance.database;
@@ -79,6 +78,25 @@ class Dao {
     );
   }
 
+  static Future<List<Map<String, dynamic>>> joinTables(
+    String table1,
+    String table2,
+    String joinType,
+    String on,
+    List<dynamic> whereArgs, {
+    String? groupBy,
+    String? having,
+    String? orderBy,
+    int? limit,
+    int? offset,
+  }) async {
+    Database db = _getDatabase();
+    return await db.rawQuery(
+      'SELECT * FROM $table1 $joinType $table2 ON $on',
+      whereArgs,
+    );
+  }
+
   /// Gets the number of rows in the specified table.
   ///
   /// Calls a method from the [Database] class to get the number of rows in
@@ -121,13 +139,20 @@ class Dao {
   /// thanks to the parameter [id] which is an int.
   ///
   /// Returns the number of rows deleted, which should always be 1.
-  static Future<int> delete(String table, int id) async {
+  static Future<int> delete(String table, int id, {String columnName = 'id'}) async {
     Database db = _getDatabase();
 
     return await db.delete(
       table,
-      where: 'id = ?',
+      where: '$columnName = ?',
       whereArgs: [id],
     );
+  }
+
+  static Future<List<Map<String, Object?>>> rawQuery(String query,
+      {List<Object>? arguments}) async {
+    Database db = _getDatabase();
+
+    return await db.rawQuery(query, arguments);
   }
 }

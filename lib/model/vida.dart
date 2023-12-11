@@ -1,35 +1,72 @@
-import 'package:vidas/model/genders.dart';
+import 'package:flutter/material.dart';
+
+import 'package:vidas/database/dao/character_dao.dart';
+import 'package:vidas/database/dao/education_dao.dart';
+import 'package:vidas/database/dao/vida_dao.dart';
+import 'package:vidas/model/character.dart';
+import 'package:vidas/model/education.dart';
 
 /// Represents one game. Includes all the variables for a game state.
 class Vida {
-
   /// The id of the game in the database.
-  int? id;
+  int id;
 
-  /// The name of the player.
-  String name;
+  /// The current year in the game.
+  late int currentYear = DateTime.now().year;
 
-  /// The gender of the player.
-  Genders gender;
+  /// The character of the player.
+  Character character;
 
-  /// The avatar number of the player.
-  int avatarId;
+  /// The educations of the player.
+  List<Education> educations = const [];
 
-  /// The age of the player.
-  int age;
+  String get description {
+    return educations.isEmpty
+        ? character.gender.toString()
+        : educations.last.level;
+  }
 
-  // List<Education> educations
-
-  /// Creates a new game with the given parameters. [id] is optional because
-  /// it does not exist until the game is saved to the database, but it should
-  /// always be updated after inserting the new game into the database.
-  Vida({
-    this.id,
-    required this.name,
-    required this.gender,
-    required this.avatarId,
-    required this.age,
+  Vida.newGame({
+    required this.id,
+    required this.character,
   });
+
+  Vida._loadGame({
+    required this.id,
+    required this.currentYear,
+    required this.character,
+    required this.educations,
+  });
+
+  void advanceYear() {
+    currentYear++;
+    character.growOlder();
+    for (var education in educations) {
+      education.advanceYear(currentYear);
+    }
+
+    // Auto-save every 5 years
+    if (character.age % 5 == 0) {
+      saveGame();
+    }
+  }
+
+  Future<bool> saveGame() async {
+    try{
+      await VidaDao.saveGame(this);
+      await CharacterDao.saveCharacter(character);
+      for (Education education in educations) {
+        await EducationDao.saveEducation(education, id);
+      }
+
+      debugPrint('Saved game with id: $id');
+      return true;
+
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
 
   /// Translates the game information into a map that can be inserted into the
   /// database. The keys of the map correspond to the column names in the
@@ -37,29 +74,29 @@ class Vida {
   Map<String, dynamic> toSqlMap() {
     return {
       'id': id,
-      'name': name,
-      'gender': gender.toString(),
-      'age': age,
-      'avatar_id': avatarId,
+      'current_year': currentYear,
     };
   }
 
   /// Creates a new game from a map that was retrieved from the database. The
   /// variables are assigned the values from the table columns.
-  factory Vida.fromSqlMap(Map<String, dynamic> map) {
-    return Vida(
+  factory Vida.load(
+    Map<String, dynamic> map,
+    Character character,
+    List<Education> educations,
+  ) {
+    //TODO get from db
+    return Vida._loadGame(
       id: map['id'] as int,
-      name: map['name'] as String,
-      gender: Genders.fromString(map['gender'] as String),
-      age: map['age'] as int,
-      avatarId: map['avatar_id'] as int,
+      currentYear: map['current_year'] as int,
+      character: character,
+      educations: educations,
     );
   }
 
   /// Returns a string representation of the game state.
   @override
   String toString() {
-    return 'Vida{id: $id, name: $name, gender: $gender, age: $age, avatarId: $avatarId}';
+    return 'Vida: $id, $currentYear, $character, $educations';
   }
-
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:vidas/config/app_routes.dart';
 
-import 'package:vidas/view/vida/vida_view_model.dart';
 
 /// Displays information about the player's money and the buttons to access
 /// the store, debug view and options view.
@@ -11,12 +9,10 @@ class ToolBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    VidaViewModel controller = Provider.of<VidaViewModel>(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-
         //Money available
         Icon(
           Icons.currency_bitcoin,
@@ -65,7 +61,9 @@ class ToolBar extends StatelessWidget {
           ),
           color: Theme.of(context).colorScheme.secondary,
           // onPressed: null,
-          onPressed: () => AppRoutes.pushOptionView(context, controller.vida),
+          onPressed: () => AppRoutes.pushOptionView(
+            context,
+          ),
         ),
       ],
     );

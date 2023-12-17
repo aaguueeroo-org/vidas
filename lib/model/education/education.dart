@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:vidas/model/education/education_levels.dart';
 
 /// Contains the information about education that the player has. It differs
 /// from the repository model in that it contains information about the
@@ -11,6 +12,14 @@ class Education {
 
   final String levelName;
   final String? field;
+
+  String get name {
+    return levelName == EducationLevels.preSchool.toString() ||
+            levelName == EducationLevels.middleSchool.toString()
+        ? levelName
+        : '$levelName - $field';
+  }
+
   double grade;
   late int? graduationYear;
   bool isEnrolled;
@@ -75,7 +84,7 @@ class Education {
   canDropOut() {
     return isEnrolled &&
         !isGraduated &&
-        levelName != 'Middle school' &&
-        levelName != 'Preschool';
+        levelName != EducationLevels.middleSchool.toString() &&
+        levelName != EducationLevels.preSchool.toString();
   }
 }

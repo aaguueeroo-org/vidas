@@ -4,7 +4,7 @@ import 'package:vidas/utils/text_utils.dart';
 
 import 'package:vidas/view/education/education_view_model.dart';
 
-import 'package:vidas/model/education.dart';
+import 'package:vidas/model/education/education.dart';
 
 /// Widget that displays the info on top the page. It will display an icon, and
 /// three text lines: title, subtitle and details. It also includes a progress

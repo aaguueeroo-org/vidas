@@ -1,7 +1,7 @@
 import 'package:vidas/database/dao/dao.dart';
-import 'package:vidas/model/education.dart';
+import 'package:vidas/model/education/education.dart';
 import 'package:vidas/model/vida.dart';
-import 'package:vidas/model/education_repo_item.dart';
+import 'package:vidas/model/education/education_repo_item.dart';
 
 class EducationDao {
   static const String _savedEducationsTable = 'GAME_EDUCATION';

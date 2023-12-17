@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vidas/view/education/education_view_model.dart';
 import 'package:vidas/utils/text_utils.dart';
 
-import 'package:vidas/model/education_repo_item.dart';
+import 'package:vidas/model/education/education_repo_item.dart';
 
 class EducationEnrollDialog extends StatelessWidget {
   const EducationEnrollDialog({super.key});

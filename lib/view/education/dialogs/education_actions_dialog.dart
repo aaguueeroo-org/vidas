@@ -15,7 +15,7 @@ class EducationActionsDialog extends StatelessWidget {
         height: 300,
         width: 200,
         child: ListView(
-          children: [],
+          children: const [],
         ),
       ),
     );

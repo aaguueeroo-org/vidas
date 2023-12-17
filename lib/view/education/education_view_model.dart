@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:vidas/config/get_it.dart';
 import 'package:vidas/database/dao/education_dao.dart';
-import 'package:vidas/model/education.dart';
+import 'package:vidas/model/education/education.dart';
 import 'package:vidas/model/vida.dart';
-import 'package:vidas/model/education_repo_item.dart';
+import 'package:vidas/model/education/education_repo_item.dart';
 
 class EducationViewModel with ChangeNotifier {
   final Vida _vida = locator.get<Vida>();

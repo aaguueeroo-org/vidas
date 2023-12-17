@@ -1,7 +1,7 @@
 
-import 'package:vidas/model/education.dart';
+import 'package:vidas/model/education/education.dart';
 
-import 'package:vidas/model/education_repo_item.dart';
+import 'package:vidas/model/education/education_repo_item.dart';
 
 class TextUtils {
   static String getCourseNameFromEnroll(EducationRepoItem education) {

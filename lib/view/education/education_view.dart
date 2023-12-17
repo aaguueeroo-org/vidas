@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vidas/view/education/widgets/education_action_button.dart';
 import 'package:vidas/view/education/widgets/education_info.dart';
-import 'package:vidas/view/education/widgets/education_list.dart';
+import 'package:vidas/view/education/list_of_titles/education_list.dart';
 
 
 class EducationView extends StatelessWidget {

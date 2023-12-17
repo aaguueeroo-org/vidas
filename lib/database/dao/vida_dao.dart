@@ -1,6 +1,6 @@
 import 'package:vidas/database/dao/dao.dart';
 import 'package:vidas/database/dao/education_dao.dart';
-import 'package:vidas/model/education.dart';
+import 'package:vidas/model/education/education.dart';
 import 'package:vidas/model/vida.dart';
 import 'package:vidas/model/game_saving_slot.dart';
 

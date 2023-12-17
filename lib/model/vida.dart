@@ -4,7 +4,7 @@ import 'package:vidas/database/dao/character_dao.dart';
 import 'package:vidas/database/dao/education_dao.dart';
 import 'package:vidas/database/dao/vida_dao.dart';
 import 'package:vidas/model/character.dart';
-import 'package:vidas/model/education.dart';
+import 'package:vidas/model/education/education.dart';
 
 /// Represents one game. Includes all the variables for a game state.
 class Vida {

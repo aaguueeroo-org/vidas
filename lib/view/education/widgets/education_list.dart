@@ -23,18 +23,18 @@ class EducationList extends StatelessWidget {
           'Titles:',
           style: titleStyle,
         ),
-        (controller.vida.educations.isEmpty)
+        (controller.educations.isEmpty)
             ? const Center(
                 child: Text('No educatioooot'),
               )
             : Expanded(
                 child: ListView.builder(
-                  itemCount: controller.vida.educations.length,
+                  itemCount: controller.educations.length,
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
                     return EducationListItem(
-                      education: controller.vida.educations[index],
+                      education: controller.educations[index],
                     );
                   },
                 ),

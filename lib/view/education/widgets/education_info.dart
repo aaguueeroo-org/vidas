@@ -48,7 +48,7 @@ class EducationInfo extends StatelessWidget {
                 children: [
                   //Player name and last name
                   Text(
-                    controller.vida.character.name,
+                    controller.characterName,
                     textAlign: TextAlign.start,
                   ),
 

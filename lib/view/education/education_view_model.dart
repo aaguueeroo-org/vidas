@@ -1,35 +1,33 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 import 'package:vidas/config/get_it.dart';
 import 'package:vidas/database/dao/education_dao.dart';
-
 import 'package:vidas/model/education.dart';
-
 import 'package:vidas/model/vida.dart';
-
 import 'package:vidas/model/education_repo_item.dart';
 
-
-
 class EducationViewModel with ChangeNotifier {
-  Vida vida = locator.get<Vida>();
+  final Vida _vida = locator.get<Vida>();
+
+  List<Education> get educations => _vida.educations;
+  int get age => _vida.character.age;
+  int get currentYear => _vida.currentYear;
+  String get characterName => _vida.character.name;
 
   EducationViewModel();
 
   Education? getCurrentEducation() {
-    if (vida.educations.isNotEmpty) {
-      return vida.educations.last;
+    if (educations.isNotEmpty) {
+      return educations.last;
     }
     return null;
   }
 
   bool isCurrentlyEnrolled() {
+    if (educations.isEmpty) return false;
 
-    if (vida.educations.isEmpty) return false;
-
-    for (Education education in vida.educations) {
-      if (education.graduationYear == vida.currentYear) {
-        return true;
-      }
+    for (Education education in educations) {
+      if (education.isEnrolled) return true;
     }
 
     return false;
@@ -38,10 +36,10 @@ class EducationViewModel with ChangeNotifier {
   Future<List<EducationRepoItem>> getCoursesToEnroll() async {
     int levelToEnroll = _getCurrentLevelOfStudies();
 
-    if(vida.character.age < 12) return [];
+    if (age < 12) return [];
 
-    if (vida.educations.isEmpty ||
-        (vida.educations.last.graduationYear! <= vida.currentYear)) {
+    if (educations.isEmpty ||
+        (educations.last.graduationYear! <= currentYear)) {
       List<EducationRepoItem> coursesToEnroll =
           await EducationDao.getEducationsAvailable(levelToEnroll);
       return coursesToEnroll;
@@ -50,57 +48,49 @@ class EducationViewModel with ChangeNotifier {
   }
 
   int _getCurrentLevelOfStudies() {
-    return vida.educations.length >= 4 ? 4 : vida.educations.length + 1;
+    return educations.length >= 4 ? 4 : educations.length + 1;
   }
 
   Future<void> startPreschool() async {
-    List<EducationRepoItem> preschool = await EducationDao.getEducationsAvailable(1);
-    enroll(preschool.first);
+    EducationRepoItem preschool =
+        (await EducationDao.getEducationsAvailable(1)).first;
+    enroll(preschool);
   }
 
   Future<void> startMiddleSchool() async {
-    List<EducationRepoItem> middleSchool = await EducationDao.getEducationsAvailable(2);
-    enroll(middleSchool.first);
+    EducationRepoItem middleSchool =
+        (await EducationDao.getEducationsAvailable(2)).first;
+    enroll(middleSchool);
   }
 
   Future<void> enroll(EducationRepoItem education) async {
     debugPrint(education.toString());
-    int? educationId = await EducationDao.insertNewEducation(education, vida);
+    int? educationId = await EducationDao.insertNewEducation(education, _vida);
 
     if (educationId != null) {
       Education newEducation = Education(
         id: educationId,
         field: education.field,
         levelName: education.levelName,
-        graduationYear: vida.currentYear + education.duration,
+        graduationYear: currentYear + education.duration,
       );
 
-      vida.educations.add(newEducation);
+      _vida.educations.add(newEducation);
       notifyListeners();
     }
-
   }
 
   Future<int> deleteEducation(int educationId) async {
     try {
       int educationsDeleted = await EducationDao.deleteEducation(educationId);
-      vida.educations.removeWhere((element) => element.id == educationId);
+      _vida.educations.removeWhere((element) => element.id == educationId);
       notifyListeners();
 
-      debugPrint('Educations: ${vida.educations}');
+      debugPrint('Educations: ${_vida.educations}');
       return educationsDeleted;
     } catch (e) {
       debugPrint(e.toString());
       return 0;
     }
   }
-
-  // void updateEducationLevels() {
-  //   for (Education education in educations) {
-  //     if (education.graduationYear == currentYear) {
-  //       education.finished = true;
-  //     }
-  //   }
-  //   notifyListeners();
-  // }
 }

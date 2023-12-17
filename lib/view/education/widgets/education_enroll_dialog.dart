@@ -5,25 +5,8 @@ import 'package:vidas/utils/text_utils.dart';
 
 import 'package:vidas/model/education_repo_item.dart';
 
-class EnrollButton extends StatelessWidget {
-  const EnrollButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = Provider.of<EducationViewModel>(context);
-
-    final String buttonText =
-        controller.isCurrentlyEnrolled() ? 'Actions' : 'Enroll';
-
-    return ElevatedButton(
-      onPressed: () => EnrollDialog.show(context),
-      child: Text(buttonText),
-    );
-  }
-}
-
-class EnrollDialog extends StatelessWidget {
-  const EnrollDialog({super.key});
+class EducationEnrollDialog extends StatelessWidget {
+  const EducationEnrollDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +66,7 @@ class EnrollDialog extends StatelessWidget {
       context: context,
       builder: (context) => ChangeNotifierProvider.value(
         value: controller,
-        child: const EnrollDialog(),
+        child: const EducationEnrollDialog(),
       ),
     );
   }

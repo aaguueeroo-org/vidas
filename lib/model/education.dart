@@ -14,6 +14,7 @@ class Education {
   final String? field;
   double? grade;
   late int? graduationYear;
+  bool isEnrolled;
   bool isGraduated;
 
   Education({
@@ -22,16 +23,18 @@ class Education {
     this.field,
     this.grade = 5,
     required this.graduationYear,
+    this.isEnrolled = true,
     this.isGraduated = false,
   });
 
   void advanceYear(int currentYear) {
-    if (currentYear == graduationYear!) _graduate();
+    if (currentYear == graduationYear! && isEnrolled) _graduate();
   }
 
   void _graduate() {
     debugPrint('Graduated from $levelName');
     isGraduated = true;
+    isEnrolled = false;
   }
 
   factory Education.fromSaved(Map<String, dynamic> map) {
@@ -42,6 +45,7 @@ class Education {
       grade: map['grade'] as double,
       graduationYear: map['graduation_year'] as int,
       isGraduated: map['is_graduated'] == 1,
+      isEnrolled: map['is_enrolled'] == 1,
     );
   }
 
@@ -50,11 +54,12 @@ class Education {
       'id': id,
       'grade': grade,
       'graduation_year': graduationYear,
+      'is_enrolled': isEnrolled ? 1 : 0,
     };
   }
 
   @override
   String toString() {
-    return 'Education: $levelName, $field, $grade, $graduationYear, $isGraduated';
+    return 'Education: $levelName, $field, $grade, $graduationYear, $isGraduated, $isEnrolled';
   }
 }

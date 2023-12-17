@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vidas/view/education/widgets/enroll_dialog.dart';
+import 'package:vidas/view/education/widgets/education_action_button.dart';
 import 'package:vidas/view/education/widgets/education_info.dart';
 import 'package:vidas/view/education/widgets/education_list.dart';
 
@@ -35,7 +35,7 @@ class EducationView extends StatelessWidget {
             SizedBox(height: 10),
             EducationInfo(),
             SizedBox(height: 20),
-            EnrollButton(),
+            EducationActionButton(),
             // const SizedBox(
             //   height: 150,
             //   child: LogContainer(),

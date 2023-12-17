@@ -1,8 +1,6 @@
 import 'package:vidas/database/dao/dao.dart';
-
 import 'package:vidas/model/education.dart';
 import 'package:vidas/model/vida.dart';
-
 import 'package:vidas/model/education_repo_item.dart';
 
 class EducationDao {
@@ -26,10 +24,9 @@ class EducationDao {
   }
 
   //read
-  //TODO fix all queries with new names of the tables
   static Future<Education> getSavedEducationById(int id) async {
     List<Map<String, dynamic>> educationsMap = await Dao.rawQuery(
-        'SELECT GAME_EDUCATION.ID, REPO_EDUCATION_LEVEL.name as level, GAME_EDUCATION.graduation_year, GAME_EDUCATION.grade, REPO_EDUCATION.field '
+        'SELECT GAME_EDUCATION.ID, REPO_EDUCATION_LEVEL.name as level, GAME_EDUCATION.graduation_year, GAME_EDUCATION.grade, REPO_EDUCATION.field, GAME_EDUCATION.is_enrolled, GAME_EDUCATION.is_enrolled '
         'FROM GAME '
         'INNER JOIN GAME_EDUCATION '
         'ON GAME.id = GAME_EDUCATION.game_id '
@@ -44,7 +41,7 @@ class EducationDao {
 
   static Future<List<Education>> getSavedEducations(int? gameId) async {
     List<Map<String, dynamic>> educationsMap = await Dao.rawQuery(
-        'SELECT GAME_EDUCATION.ID, REPO_EDUCATION_LEVEL.name as level, GAME_EDUCATION.graduation_year, GAME_EDUCATION.grade, REPO_EDUCATION.field '
+        'SELECT GAME_EDUCATION.ID, REPO_EDUCATION_LEVEL.name as level, GAME_EDUCATION.graduation_year, GAME_EDUCATION.grade, REPO_EDUCATION.field, GAME_EDUCATION.is_enrolled '
         'FROM GAME '
         'INNER JOIN GAME_EDUCATION '
         'ON GAME.id = GAME_EDUCATION.game_id '

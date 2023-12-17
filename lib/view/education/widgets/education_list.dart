@@ -61,10 +61,11 @@ class EducationListItem extends StatelessWidget {
           color: color,
         );
 
-    final String educationName = education.levelName == 'Preeschool' ||
-            education.levelName == 'Middle school'
-        ? education.levelName
-        : '${education.levelName} - ${education.field}';
+    final String educationName =
+        education.levelName == EducationLevels.preSchool.toString() ||
+                education.levelName == EducationLevels.middleSchool.toString()
+            ? education.levelName
+            : '${education.levelName} - ${education.field}';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),

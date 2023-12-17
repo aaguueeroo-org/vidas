@@ -4,6 +4,8 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:vidas/view/education/education_view.dart';
 import 'package:vidas/view/vida/vida_view.dart';
 
+GlobalKey<ConvexAppBarState> _appBarKey = GlobalKey<ConvexAppBarState>();
+
 class GameShellView extends StatefulWidget {
   const GameShellView({super.key});
 
@@ -13,12 +15,9 @@ class GameShellView extends StatefulWidget {
 
 class GameShellViewState extends State<GameShellView> {
   final PageController _pageController = PageController(initialPage: 1);
-  int _selectedTab = 1;
 
   void _onPageChanged(int index) {
-    setState(() {
-      _selectedTab = index;
-    });
+    _appBarKey.currentState!.tap(index);
   }
 
   void _onTap(int index) {
@@ -40,6 +39,7 @@ class GameShellViewState extends State<GameShellView> {
         ],
       ),
       bottomNavigationBar: ConvexAppBar(
+        key: _appBarKey,
         elevation: 0,
         style: TabStyle.reactCircle,
         items: const [
@@ -47,7 +47,7 @@ class GameShellViewState extends State<GameShellView> {
           TabItem(icon: Icons.heart_broken, title: 'Vida'),
           // TabItem(icon: Icons.bar_chart, title: 'Stats'),
         ],
-        initialActiveIndex: _selectedTab,
+        initialActiveIndex: 1,
         onTap: _onTap,
         backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
         activeColor: Theme.of(context).colorScheme.primary,

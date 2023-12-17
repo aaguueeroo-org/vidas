@@ -27,29 +27,27 @@ class EducationView extends StatelessWidget {
           // ),
         ],
       ),
-      body: Container(
-        child: const Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(height: 10),
-            EducationInfo(),
-            SizedBox(height: 20),
-            EducationActionButton(),
-            // const SizedBox(
-            //   height: 150,
-            //   child: LogContainer(),
-            // ),
-            SizedBox(height: 20),
-            Expanded(child: EducationList()),
-            SizedBox(height: 30),
-            // ElevatedButton(
-            //   onPressed: () => controller.showActionsDialog(context),
-            //   child: const Text('Actions'),
-            // ),
-            // const LogsAndButtons(),
-          ],
-        ),
+      body: const Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(height: 10),
+          EducationInfo(),
+          SizedBox(height: 20),
+          EducationActionButton(),
+          // const SizedBox(
+          //   height: 150,
+          //   child: LogContainer(),
+          // ),
+          SizedBox(height: 20),
+          Expanded(child: EducationList()),
+          SizedBox(height: 30),
+          // ElevatedButton(
+          //   onPressed: () => controller.showActionsDialog(context),
+          //   child: const Text('Actions'),
+          // ),
+          // const LogsAndButtons(),
+        ],
       ),
     );
   }

@@ -18,6 +18,7 @@ class LoadVidaViewModel with ChangeNotifier {
   /// Navigates to the [VidaView] loading the specified [Vida].
   static Future<void> loadGame(GameSavingSlot game, BuildContext context) async {
 
+    NavigatorState navigator = Navigator.of(context);
     Vida vida = await VidaDao.getVida(game.id);
 
     if (locator.isRegistered<Vida>()) {
@@ -25,7 +26,7 @@ class LoadVidaViewModel with ChangeNotifier {
     }
 
     setupLocator(vida: vida);
-    AppRoutes.createVidaView(Navigator.of(context));
+    AppRoutes.createVidaView(navigator);
   }
 
   Future<bool> deleteGame(int gameId) async {

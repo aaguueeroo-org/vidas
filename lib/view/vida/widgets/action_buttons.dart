@@ -109,30 +109,28 @@ class ActionButtonSingle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            flex: 5,
-            child: FittedBox(
-              fit: BoxFit.fitHeight,
-              child: IconButton(
-                padding: EdgeInsets.zero,
-                icon: Icon(icon),
-                onPressed: () => onPressed(),
-                // color: foregroundColor,
-              ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          flex: 5,
+          child: FittedBox(
+            fit: BoxFit.fitHeight,
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: Icon(icon),
+              onPressed: () => onPressed(),
+              // color: foregroundColor,
             ),
           ),
-          Text(
-            text,
-            style: textStyle,
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+        ),
+        Text(
+          text,
+          style: textStyle,
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

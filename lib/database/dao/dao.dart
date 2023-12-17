@@ -59,6 +59,8 @@ class Dao {
     String where,
     String table,
     List<dynamic> whereArgs, {
+    bool? distinct,
+    List<String>? columns,
     String? groupBy,
     String? having,
     String? orderBy,
@@ -75,6 +77,8 @@ class Dao {
       orderBy: orderBy,
       limit: limit,
       offset: offset,
+      distinct: distinct,
+      columns: columns,
     );
   }
 
@@ -139,7 +143,8 @@ class Dao {
   /// thanks to the parameter [id] which is an int.
   ///
   /// Returns the number of rows deleted, which should always be 1.
-  static Future<int> delete(String table, int id, {String columnName = 'id'}) async {
+  static Future<int> delete(String table, int id,
+      {String columnName = 'id'}) async {
     Database db = _getDatabase();
 
     return await db.delete(

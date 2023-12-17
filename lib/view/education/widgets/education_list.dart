@@ -61,47 +61,65 @@ class EducationListItem extends StatelessWidget {
           color: color,
         );
 
-    final controller = Provider.of<EducationViewModel>(context);
-
-    final String educationName =
-        education.levelName == 'Preeschool' || education.levelName == 'Middle school'
-            ? education.levelName
-            : '${education.levelName} - ${education.field}';
+    final String educationName = education.levelName == 'Preeschool' ||
+            education.levelName == 'Middle school'
+        ? education.levelName
+        : '${education.levelName} - ${education.field}';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          //icon
-          Icon(
-            Icons.school,
-            size: 50,
-            color: color,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  educationName,
-                  overflow: TextOverflow.ellipsis,
-                  style: titleStyle,
-                ),
-                Text(
-                  'Grade: ${education.grade}',
-                  style: textStyle,
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => controller.deleteEducation(education.id),
-          ),
-        ],
+      child: ListTile(
+        leading: Icon(
+          Icons.school,
+          size: 50,
+          color: color,
+        ),
+        title: Text(
+          educationName,
+          overflow: TextOverflow.ellipsis,
+          style: titleStyle,
+        ),
+        subtitle: Text(
+          'Grade: ${education.grade}',
+          style: textStyle,
+        ),
+        trailing: education.canDropOut()
+            ? EducationPopupMenu(
+                education: education,
+              )
+            : null,
       ),
+    );
+  }
+}
+
+class EducationPopupMenu extends StatelessWidget {
+  final Education education;
+
+  const EducationPopupMenu({
+    super.key,
+    required this.education,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Provider.of<EducationViewModel>(context);
+
+    return PopupMenuButton(
+      icon: const Icon(Icons.more_vert),
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: 'drop_out',
+          child: Text('Drop out'),
+        ),
+      ],
+      onSelected: (value) {
+        switch (value) {
+          case 'drop_out':
+            controller.dropOut(education);
+            break;
+        }
+      },
     );
   }
 }

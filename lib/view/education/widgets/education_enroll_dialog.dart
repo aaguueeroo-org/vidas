@@ -40,7 +40,7 @@ class EducationEnrollDialog extends StatelessWidget {
                 },
               );
             } else if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.data!.isEmpty) {
+                snapshot.hasData && snapshot.data!.isEmpty) {
               return const Center(
                 child: Text('No courses available'),
               );

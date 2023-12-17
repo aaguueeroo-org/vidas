@@ -36,15 +36,9 @@ class EducationViewModel with ChangeNotifier {
   Future<List<EducationRepoItem>> getCoursesToEnroll() async {
     int levelToEnroll = _getCurrentLevelOfStudies();
 
-    if (age < 12) return [];
-
-    if (educations.isEmpty ||
-        (educations.last.graduationYear! <= currentYear)) {
-      List<EducationRepoItem> coursesToEnroll =
-          await EducationDao.getEducationsAvailable(levelToEnroll);
-      return coursesToEnroll;
-    }
-    return [];
+    List<EducationRepoItem> coursesToEnroll =
+        await EducationDao.getEducationsAvailable(levelToEnroll);
+    return coursesToEnroll;
   }
 
   int _getCurrentLevelOfStudies() {
@@ -78,6 +72,27 @@ class EducationViewModel with ChangeNotifier {
       _vida.educations.add(newEducation);
       notifyListeners();
     }
+  }
+
+  Future<void> reEnroll(Education education) async {
+    int duration = await EducationDao.getDurationOfEducation(education);
+    education.enroll(currentYear + duration);
+    var index =
+        _vida.educations.indexWhere((element) => element.id == education.id);
+    if (index != -1) {
+      _vida.educations[index] = education;
+    }
+    notifyListeners();
+  }
+
+  void dropOut(Education education) {
+    education.dropOut();
+    var index =
+        _vida.educations.indexWhere((element) => element.id == education.id);
+    if (index != -1) {
+      _vida.educations[index] = education;
+    }
+    notifyListeners();
   }
 
   Future<int> deleteEducation(int educationId) async {

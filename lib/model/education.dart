@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 /// from the repository model in that it contains information about the
 /// graduation year and the grade.
 class Education {
-
   /// The id of the saved education corresponding to GAME_EDUCATION table in the
   /// database. It contains data that is specific to the game, such as the
   /// grade, the graduation year and whether the education is completed or not.
@@ -12,7 +11,7 @@ class Education {
 
   final String levelName;
   final String? field;
-  double? grade;
+  double grade;
   late int? graduationYear;
   bool isEnrolled;
   bool isGraduated;
@@ -37,13 +36,23 @@ class Education {
     isEnrolled = false;
   }
 
+  void enroll(int graduationYear) {
+    isEnrolled = true;
+    this.graduationYear = graduationYear;
+  }
+
+  void dropOut() {
+    isEnrolled = false;
+    graduationYear = null;
+  }
+
   factory Education.fromSaved(Map<String, dynamic> map) {
     return Education(
       id: map['id'] as int,
       levelName: map['level'],
       field: map['field'],
       grade: map['grade'] as double,
-      graduationYear: map['graduation_year'] as int,
+      graduationYear: map['graduation_year'] as int?,
       isGraduated: map['is_graduated'] == 1,
       isEnrolled: map['is_enrolled'] == 1,
     );
@@ -61,5 +70,12 @@ class Education {
   @override
   String toString() {
     return 'Education: $levelName, $field, $grade, $graduationYear, $isGraduated, $isEnrolled';
+  }
+
+  canDropOut() {
+    return isEnrolled &&
+        !isGraduated &&
+        levelName != 'Middle school' &&
+        levelName != 'Preschool';
   }
 }

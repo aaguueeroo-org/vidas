@@ -13,7 +13,6 @@ class EducationDao {
     EducationRepoItem education,
     Vida vida,
   ) async {
-
     Map<String, dynamic> newEducationMap = {
       'education_id': education.id,
       'game_id': vida.id,
@@ -54,7 +53,8 @@ class EducationDao {
     return educationsMap.map((e) => Education.fromSaved(e)).toList();
   }
 
-  static Future<List<EducationRepoItem>> getEducationsAvailable(int level) async {
+  static Future<List<EducationRepoItem>> getEducationsAvailable(
+      int level) async {
     List<Map<String, dynamic>> educationsMap = await Dao.rawQuery(
         'SELECT REPO_EDUCATION.id as education_id, FIELD, REPO_EDUCATION_LEVEL.name as level, REPO_EDUCATION_LEVEL.duration '
         'FROM REPO_EDUCATION '
@@ -63,6 +63,17 @@ class EducationDao {
         'WHERE REPO_EDUCATION.level_id = $level ');
 
     return educationsMap.map((e) => EducationRepoItem.fromRepo(e)).toList();
+  }
+
+  static Future<int> getDurationOfEducation(Education education) async {
+    List<Map<String, dynamic>> result = await Dao.readRows(
+      'name',
+      'REPO_EDUCATION_LEVEL',
+      [education.levelName],
+      columns: ['duration'],
+    );
+
+    return result.first['duration'] as int;
   }
 
   //update

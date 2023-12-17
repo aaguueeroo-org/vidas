@@ -1,28 +1,93 @@
-
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 import 'package:vidas/config/get_it.dart';
 import 'package:vidas/database/dao/education_dao.dart';
 
 import 'package:vidas/model/education.dart';
-import 'package:vidas/view/vida/vida_view_model.dart';
 
 import 'package:vidas/model/vida.dart';
 
-class EducationViewModel with ChangeNotifier {
+import 'package:vidas/model/education_repo_item.dart';
 
-  String playerName = locator.get<Vida>().character.name;
-  List<Education> educations = locator.get<Vida>().educations;
+
+
+class EducationViewModel with ChangeNotifier {
+  Vida vida = locator.get<Vida>();
 
   EducationViewModel();
+
+  Education? getCurrentEducation() {
+    if (vida.educations.isNotEmpty) {
+      return vida.educations.last;
+    }
+    return null;
+  }
+
+  bool isCurrentlyEnrolled() {
+
+    if (vida.educations.isEmpty) return false;
+
+    for (Education education in vida.educations) {
+      if (education.graduationYear == vida.currentYear) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  Future<List<EducationRepoItem>> getCoursesToEnroll() async {
+    int levelToEnroll = _getCurrentLevelOfStudies();
+
+    if(vida.character.age < 12) return [];
+
+    if (vida.educations.isEmpty ||
+        (vida.educations.last.graduationYear! <= vida.currentYear)) {
+      List<EducationRepoItem> coursesToEnroll =
+          await EducationDao.getEducationsAvailable(levelToEnroll);
+      return coursesToEnroll;
+    }
+    return [];
+  }
+
+  int _getCurrentLevelOfStudies() {
+    return vida.educations.length >= 4 ? 4 : vida.educations.length + 1;
+  }
+
+  Future<void> startPreschool() async {
+    List<EducationRepoItem> preschool = await EducationDao.getEducationsAvailable(1);
+    enroll(preschool.first);
+  }
+
+  Future<void> startMiddleSchool() async {
+    List<EducationRepoItem> middleSchool = await EducationDao.getEducationsAvailable(2);
+    enroll(middleSchool.first);
+  }
+
+  Future<void> enroll(EducationRepoItem education) async {
+    debugPrint(education.toString());
+    int? educationId = await EducationDao.insertNewEducation(education, vida);
+
+    if (educationId != null) {
+      Education newEducation = Education(
+        id: educationId,
+        field: education.field,
+        levelName: education.levelName,
+        graduationYear: vida.currentYear + education.duration,
+      );
+
+      vida.educations.add(newEducation);
+      notifyListeners();
+    }
+
+  }
 
   Future<int> deleteEducation(int educationId) async {
     try {
       int educationsDeleted = await EducationDao.deleteEducation(educationId);
-      educations.removeWhere((element) => element.id == educationId);
+      vida.educations.removeWhere((element) => element.id == educationId);
       notifyListeners();
 
-      debugPrint('Educations: $educations');
+      debugPrint('Educations: ${vida.educations}');
       return educationsDeleted;
     } catch (e) {
       debugPrint(e.toString());
@@ -30,60 +95,7 @@ class EducationViewModel with ChangeNotifier {
     }
   }
 
-  Education? getCurrentEducation() {
-    if (educations.isNotEmpty) {
-      return educations.last;
-    }
-    return null;
-  }
-
-  bool isCurrentlyEnrolled(BuildContext context) {
-    final vidaController = Provider.of<VidaViewModel>(context, listen: false);
-
-    for (Education education in educations) {
-      if (education.graduationYear == vidaController.age) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  Future<List<Education>> getCoursesToEnroll(BuildContext context) async {
-    final VidaViewModel vidaController = Provider.of<VidaViewModel>(context, listen: false);
-    int currentYear = vidaController.age;
-
-    debugPrint('Current year: $currentYear');
-    debugPrint('Graduation year: ${educations.last.graduationYear}');
-    if (educations.last.graduationYear! <= currentYear) {
-      int levelToEnroll = _getCurrentLevelOfStudies();
-      List<Education> coursesToEnroll =
-          await EducationDao.getEducationsAvailable(levelToEnroll);
-      debugPrint('Courses to enroll: $coursesToEnroll');
-      return coursesToEnroll;
-    }
-    return [];
-  }
-
-  int _getCurrentLevelOfStudies() {
-    return educations.length >= 4 ? 4 : educations.length + 1;
-  }
-
-  Future<void> enroll(Education education, Vida vida) async {
-    Education newEducation = await EducationDao.insertNewEducation(education, vida);
-    educations.add(newEducation);
-    notifyListeners();
-  }
-
   // void updateEducationLevels() {
-  //   for (Education education in educations) {
-  //     if (education.graduationYear == currentYear) {
-  //       education.finished = true;
-  //     }
-  //   }
-  //   notifyListeners();
-  // }
-  //
-  // void _graduate() {
   //   for (Education education in educations) {
   //     if (education.graduationYear == currentYear) {
   //       education.finished = true;

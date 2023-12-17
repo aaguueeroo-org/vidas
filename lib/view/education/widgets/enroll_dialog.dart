@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:vidas/model/vida.dart';
 import 'package:vidas/view/education/education_view_model.dart';
-
-import 'package:vidas/model/education.dart';
 import 'package:vidas/utils/text_utils.dart';
 
-class EducationButton extends StatelessWidget {
-  const EducationButton({super.key});
+import 'package:vidas/model/education_repo_item.dart';
+
+class EnrollButton extends StatelessWidget {
+  const EnrollButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<EducationViewModel>(context);
 
     final String buttonText =
-        controller.isCurrentlyEnrolled(context) ? 'Actions' : 'Enroll';
+        controller.isCurrentlyEnrolled() ? 'Actions' : 'Enroll';
 
     return ElevatedButton(
       onPressed: () => EnrollDialog.show(context),
@@ -30,33 +28,38 @@ class EnrollDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<EducationViewModel>(context, listen: false);
-    final Vida vida = GetIt.instance.get<Vida>();
 
     return Dialog(
       child: SizedBox(
         height: 300,
         width: 200,
         child: FutureBuilder(
-          future: controller.getCoursesToEnroll(context),
+          future: controller.getCoursesToEnroll(),
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final List<Education> educations = snapshot.data!;
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData && snapshot.data!.isNotEmpty) {
+              final List<EducationRepoItem> educations = snapshot.data!;
 
               return ListView.builder(
                 itemCount: educations.length,
                 itemBuilder: (context, index) {
                   String courseName =
-                      TextUtils.getCourseName(educations[index]);
+                      TextUtils.getCourseNameFromEnroll(educations[index]);
 
                   return ListTile(
                     title: Text(courseName),
                     onTap: () {
-                      controller.enroll(educations[index], vida);
+                      controller.enroll(educations[index]);
                       Navigator.of(context).pop();
-                      debugPrint('Enrolled in ${educations[index].field}');
+                      debugPrint('Enrolled in ${educations[index].levelName}');
                     },
                   );
                 },
+              );
+            } else if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.data!.isEmpty) {
+              return const Center(
+                child: Text('No courses available'),
               );
             } else if (snapshot.hasError) {
               return const Center(

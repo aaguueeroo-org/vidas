@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import 'package:vidas/model/vida.dart';
@@ -8,6 +7,8 @@ import 'package:vidas/view/vida/vida_view.dart';
 import 'package:vidas/view/vida/vida_view_model.dart';
 import 'package:vidas/view/options/options_view.dart';
 import 'package:vidas/view/education/education_view_model.dart';
+
+import 'package:vidas/config/get_it.dart';
 
 /// Contains methods for navigating between views.
 class AppRoutes {
@@ -41,7 +42,7 @@ class AppRoutes {
   static void pushOptionView(
     BuildContext context,
   ) {
-    Vida vida = GetIt.instance.get<Vida>();
+    Vida vida = locator.get<Vida>();
 
     Navigator.of(context).push(
       MaterialPageRoute(

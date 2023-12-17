@@ -3,30 +3,26 @@ import 'package:vidas/database/dao/dao.dart';
 import 'package:vidas/model/education.dart';
 import 'package:vidas/model/vida.dart';
 
+import 'package:vidas/model/education_repo_item.dart';
+
 class EducationDao {
   static const String _savedEducationsTable = 'GAME_EDUCATION';
   // static const String _educationTable = 'REPO_EDUCATION';
 
-  //create
-  static Future<Education> insertNewEducation(
-    Education education,
+  /// Inserts a new row into the table GAME_EDUCATION. The row contains the
+  /// education id, the game id, the graduation year and the grade.
+  static Future<int?> insertNewEducation(
+    EducationRepoItem education,
     Vida vida,
   ) async {
-    double grade = 5.0;
-    int graduationYear =
-        vida.currentYear + await _getDurationOfEducation(education);
 
-    Map<String, dynamic> savedEducation = education.toSqlMapCreateMode();
-    savedEducation['grade'] = grade;
-    savedEducation['graduation_year'] = graduationYear;
-    savedEducation['game_id'] = vida.id;
+    Map<String, dynamic> newEducationMap = {
+      'education_id': education.id,
+      'game_id': vida.id,
+      'graduation_year': vida.currentYear + education.duration,
+    };
 
-    int? educationId =
-        await Dao.insertRow(_savedEducationsTable, savedEducation);
-
-    Education newEducation = await getSavedEducationById(educationId!);
-
-    return newEducation;
+    return await Dao.insertRow(_savedEducationsTable, newEducationMap);
   }
 
   //read
@@ -37,13 +33,13 @@ class EducationDao {
         'FROM GAME '
         'INNER JOIN GAME_EDUCATION '
         'ON GAME.id = GAME_EDUCATION.game_id '
-        'INNER JOIN  EDUCATION '
+        'INNER JOIN REPO_EDUCATION '
         'ON GAME_EDUCATION.education_id = REPO_EDUCATION.id '
         'LEFT JOIN REPO_EDUCATION_LEVEL '
         'ON REPO_EDUCATION.level_id = REPO_EDUCATION_LEVEL.id '
         'WHERE GAME_EDUCATION.id = $id');
 
-    return Education.fromSqlMap(educationsMap.first);
+    return Education.fromSaved(educationsMap.first);
   }
 
   static Future<List<Education>> getSavedEducations(int? gameId) async {
@@ -58,25 +54,18 @@ class EducationDao {
         'ON REPO_EDUCATION.level_id = REPO_EDUCATION_LEVEL.id '
         'WHERE GAME.id = $gameId');
 
-    return educationsMap.map((e) => Education.fromSqlMap(e)).toList();
+    return educationsMap.map((e) => Education.fromSaved(e)).toList();
   }
 
-  static Future<int> _getDurationOfEducation(Education education) async {
-    List<Map<String, dynamic>> result = await Dao.rawQuery(
-        'SELECT duration FROM REPO_EDUCATION_LEVEL WHERE name = ?',
-        arguments: [education.level]);
-
-    return result.first['duration'] as int;
-  }
-
-  static Future<List<Education>> getEducationsAvailable(int level) async {
+  static Future<List<EducationRepoItem>> getEducationsAvailable(int level) async {
     List<Map<String, dynamic>> educationsMap = await Dao.rawQuery(
-        ' SELECT EDUCATION.id, FIELD, REPO_EDUCATION_LEVEL.name as level FROM EDUCATION '
+        'SELECT REPO_EDUCATION.id as education_id, FIELD, REPO_EDUCATION_LEVEL.name as level, REPO_EDUCATION_LEVEL.duration '
+        'FROM REPO_EDUCATION '
         'LEFT JOIN REPO_EDUCATION_LEVEL '
-        'ON EDUCATION.level_id = REPO_EDUCATION_LEVEL.id '
-        'WHERE EDUCATION.level_id = $level ');
+        'ON REPO_EDUCATION.level_id = REPO_EDUCATION_LEVEL.id '
+        'WHERE REPO_EDUCATION.level_id = $level ');
 
-    return educationsMap.map((e) => Education.fromSqlMap(e)).toList();
+    return educationsMap.map((e) => EducationRepoItem.fromRepo(e)).toList();
   }
 
   //update

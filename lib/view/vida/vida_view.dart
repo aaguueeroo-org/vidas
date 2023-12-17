@@ -55,7 +55,7 @@ class VidaView extends StatelessWidget {
 
           //next year button
           ElevatedButton(
-            onPressed: () => controller.nextYearPressed(),
+            onPressed: () => controller.nextYearPressed(context),
             child: const Text('Next year'),
           ),
         ],

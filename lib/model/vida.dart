@@ -18,12 +18,12 @@ class Vida {
   Character character;
 
   /// The educations of the player.
-  List<Education> educations = const [];
+  List<Education> educations = [];
 
   String get description {
     return educations.isEmpty
         ? character.gender.toString()
-        : educations.last.level;
+        : educations.last.levelName;
   }
 
   Vida.newGame({
@@ -40,6 +40,7 @@ class Vida {
 
   void advanceYear() {
     currentYear++;
+    debugPrint('Advanced year to $currentYear');
     character.growOlder();
     for (var education in educations) {
       education.advanceYear(currentYear);

@@ -19,7 +19,7 @@ class EducationInfo extends StatelessWidget {
     final Education? education = controller.getCurrentEducation();
 
     final String educationName = education != null
-        ? TextUtils.getCourseName(education)
+        ? TextUtils.getCourseNameFromEducation(education)
         : 'No current studies';
 
     return Column(
@@ -48,7 +48,7 @@ class EducationInfo extends StatelessWidget {
                 children: [
                   //Player name and last name
                   Text(
-                    controller.playerName,
+                    controller.vida.character.name,
                     textAlign: TextAlign.start,
                   ),
 

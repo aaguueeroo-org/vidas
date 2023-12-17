@@ -1,11 +1,19 @@
 
 import 'package:vidas/model/education.dart';
 
+import 'package:vidas/model/education_repo_item.dart';
+
 class TextUtils {
-  static String getCourseName(Education education) {
+  static String getCourseNameFromEnroll(EducationRepoItem education) {
     return education.field != null
-        ? '${education.level} - ${education.field!}'
-        : education.level;
+        ? '${education.levelName} - ${education.field!}'
+        : education.levelName;
+  }
+
+  static String getCourseNameFromEducation(Education education) {
+    return education.field != null
+        ? '${education.levelName} - ${education.field!}'
+        : education.levelName;
   }
 
   // Format DateTime to string in "dd/MM/yyyy" format

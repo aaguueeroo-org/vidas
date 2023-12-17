@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:vidas/config/app_routes.dart';
 import 'package:vidas/config/get_it.dart';
 import 'package:vidas/database/dao/character_dao.dart';
@@ -121,8 +120,8 @@ class NewVidaViewModel with ChangeNotifier {
     int? characterId =
         await CharacterDao.createNewCharacter(character, vidaId!);
 
-    if (GetIt.instance.isRegistered<Vida>()) {
-      GetIt.instance.unregister<Vida>();
+    if (locator.isRegistered<Vida>()) {
+      locator.unregister<Vida>();
     }
 
     setupLocator(

@@ -4,7 +4,7 @@ import 'package:vidas/view/education/widgets/education_action_button.dart';
 import 'package:vidas/view/education/widgets/education_info.dart';
 import 'package:vidas/view/education/list_of_titles/education_list.dart';
 
-import 'education_view_model.dart';
+import 'package:vidas/view/education/education_view_model.dart';
 
 class EducationView extends StatelessWidget {
   const EducationView({super.key});

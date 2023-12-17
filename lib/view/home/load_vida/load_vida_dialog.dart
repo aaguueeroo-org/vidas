@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vidas/model/vida.dart';
+import 'package:vidas/model/game_saving_slot.dart';
 import 'package:vidas/view/home/load_vida/widgets/vida_slot_card.dart';
 
 import 'package:vidas/view/home/load_vida/load_vida_view_model.dart';
@@ -45,13 +45,13 @@ class _LoadVidaDialogState extends State<LoadVidaDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const BackButton(),
-            FutureBuilder<List<Vida>>(
+            FutureBuilder<List<GameSavingSlot>>(
               future: LoadVidaViewModel.getAllSavedGames(),
               builder: (context, snapshot) {
 
                 // If there are saved games, show them
                 if (snapshot.hasData) {
-                  List<Vida> vidas = snapshot.data!;
+                  List<GameSavingSlot> vidas = snapshot.data!;
 
                   // Saved games list
                   return ListView.separated(
@@ -59,15 +59,15 @@ class _LoadVidaDialogState extends State<LoadVidaDialog> {
                     itemCount: vidas.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 10),
                     itemBuilder: (context, index) {
-                      return VidaSlotCard(
-                        vida: vidas[index],
-                        onDelete: (vidaId) {
+                      return GameSlotCard(
+                        game: vidas[index],
+                        onDelete: (vida) {
                           // Removes item in the view
                           setState(() {
                             vidas.removeAt(index);
                           });
                           //Removes item in the database
-                          controller.deleteGame(vidaId);
+                          controller.deleteGame(vida.id);
                         },
                       );
                     },

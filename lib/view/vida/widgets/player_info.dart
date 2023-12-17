@@ -41,7 +41,7 @@ class PlayerInfo extends StatelessWidget {
             ],
           ),
           child: Image.asset(
-            'assets/images/avatars/${controller.vida.avatarId}.png',
+            'assets/images/avatars/${controller.avatarId}.png',
             height: 120,
             width: 120,
           ),
@@ -52,19 +52,19 @@ class PlayerInfo extends StatelessWidget {
             children: [
               //Player name and last name
               Text(
-                controller.vida.name,
+                controller.name,
                 textAlign: TextAlign.start,
               ),
 
               //Player age
               Text(
-                '${controller.vida.age} years old',
+                '${controller.age} years old',
                 textAlign: TextAlign.start,
               ),
 
               //Player job position or study
               Text(
-                controller.vida.gender.toString(),
+                controller.description.toString(),
                 textAlign: TextAlign.start,
               ),
             ],

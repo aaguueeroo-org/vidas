@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:vidas/database/database_connection.dart';
 import 'package:vidas/view/home/home_view.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize database
   DatabaseConnection.instance.database;
 
-  runApp(
-    const MyApp(),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
